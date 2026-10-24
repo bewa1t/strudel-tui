@@ -1,0 +1,81 @@
+%YAML 1.2
+---
+# Strudel = JavaScript where "double quoted" and `backtick` strings are mini-notation.
+name: Strudel
+file_extensions: [strudel]
+scope: source.strudel
+
+contexts:
+  main:
+    - match: '//.*$'
+      scope: comment.line.double-slash
+    - match: '/\*'
+      push: block_comment
+    # pattern labels: `$:`, `_$:`, `d1:`
+    - match: '^\s*(_?[\w$]+)\s*(:)(?!:)'
+      captures:
+        1: keyword.control
+        2: keyword.control
+    - match: '"'
+      scope: string.quoted.double
+      push: mini_double
+    - match: '`'
+      scope: string.quoted.double
+      push: mini_backtick
+    - match: "'"
+      push: single_string
+    - match: '\b(const|let|var|function|async|await|return|if|else|for|of|in|new|class|export|import|from)\b'
+      scope: keyword.control
+    - match: '\b(true|false|null|undefined|this)\b'
+      scope: constant.language
+    - match: '\b\d+(\.\d+)?\b|\.\d+\b'
+      scope: constant.numeric
+    # .method(
+    - match: '(\.)\s*([A-Za-z_$][\w$]*)(?=\s*\()'
+      captures:
+        1: punctuation.accessor
+        2: entity.name.function
+    # call(
+    - match: '\b([A-Za-z_$][\w$]*)(?=\s*\()'
+      captures:
+        1: support.function
+    - match: '=>|[-+*/%=<>!&|?]+'
+      scope: keyword.operator
+
+  block_comment:
+    - meta_scope: comment.block
+    - match: '\*/'
+      pop: true
+
+  single_string:
+    - meta_scope: string.quoted.single
+    - match: '\\.'
+    - match: "'"
+      pop: true
+
+  mini_double:
+    - meta_content_scope: string.quoted.double
+    - match: '"'
+      scope: string.quoted.double
+      pop: true
+    - include: mini
+
+  mini_backtick:
+    - meta_content_scope: string.quoted.double
+    - match: '`'
+      scope: string.quoted.double
+      pop: true
+    - include: mini
+
+  mini:
+    # rests
+    - match: '~'
+      scope: constant.language
+    # sequence structure
+    - match: '[\[\]<>{}(),|]'
+      scope: keyword.control
+    # operators: * / ! @ ? % : ..
+    - match: '\.\.|[*/!@?%:]'
+      scope: keyword.operator
+    - match: '-?\d+(\.\d+)?'
+      scope: constant.numeric

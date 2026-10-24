@@ -1,0 +1,11 @@
+// space p: play   space s: stop   K: docs   :help
+setcps(0.55)
+
+$: s("bd*2, ~ sd, [~ hh]*4").bank("RolandTR909").gain(.9)
+
+$: note("<c2 [eb2 c2] g1 bb1>*2")
+  .s("sawtooth").lpf(sine.range(300, 1600).slow(8))
+  .decay(.2).sustain(0)
+
+$: n("0 2 4 <6 7>").scale("C:minor").s("piano")
+  .room(.4).delay(.25)
