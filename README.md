@@ -19,6 +19,13 @@ strudel.cc — synths, samples, effects, MIDI — and new Strudel features show 
 
 macOS only for now (it uses `~/Library` paths, `open` and launchd).
 
+## Why
+
+I wanted an offline-first way to write and edit DJ sets and songs anywhere: on a plane, on a train,
+or anywhere else without wifi. And I wanted to do it in the terminal, because that's where I live.
+strudel.cc is great, but it's a browser tab that needs the network for its samples. strudel-tui keeps
+the same Strudel engine, puts it behind a vim editor in the terminal, and caches every sample locally.
+
 ## How it works
 
 ```
